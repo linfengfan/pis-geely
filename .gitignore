@@ -1,13 +1,47 @@
 # Dependencies
 node_modules/
 
+# Build output
+.next/
+dist/
+build/
+
+# Environment
+.env
+.env.local
+.env.*.local
+
 # Database
 .chinamarket/
 
 # IDE
 .vscode/
 .idea/
+*.swp
+*.swo
 
 # OS
 .DS_Store
+Thumbs.db
 .worktrees/
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Claude & Superpowers (cache/temp directories)
+.claude/
+.superpowers/
+.cache/
+
+# Prisma
+prisma/*.db
+prisma/*.db-journal
+
+# Testing
+coverage/
+
+# Misc
+*.tsbuildinfo

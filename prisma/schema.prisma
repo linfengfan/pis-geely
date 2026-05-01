@@ -1,0 +1,124 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum CompanyType {
+  BANK_WATER  @map("银行/公用")
+  CONSUMER   @map("消费/公用")
+  GROWTH    @map("成长型")
+  HEAVY_ASSET @map("重资产")
+}
+
+model Company {
+  id          String   @id @default(cuid())
+  name        String
+  code        String   @unique
+  industry   String?
+  companyType CompanyType?
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  financialData FinancialData[]
+  analysis    Analysis[]
+  holdings    Holding[]
+
+  @@map("companies")
+}
+
+model FinancialData {
+  id                 String   @id @default(cuid())
+  companyId           String
+  year               Int
+  revenue            Float?
+  netProfit          Float?
+  totalAssets        Float?
+  totalLiabilities  Float?
+  equity             Float?
+  operatingCashFlow Float?
+  investingCashFlow Float?
+  financingCashFlow Float?
+  grossMargin        Float?
+  netMargin         Float?
+  roe               Float?
+  roic              Float?
+  debtRatio         Float?
+  dividendYield     Float?
+  eps               Float?
+  ebitda            Float?
+  createdAt         DateTime @default(now())
+
+  company Company @relation(fields: [companyId], references: [id], onDelete: Cascade)
+
+  @@index([companyId, year])
+  @@map("financial_data")
+}
+
+model Analysis {
+  id            String   @id @default(cuid())
+  companyId     String
+  createdAt    DateTime @default(now())
+
+  cn10y           Float?
+  usdcny         Float?
+  lpr            Float?
+  socialFinancing Float?
+
+  conclusion     String?
+  valuation      Float?
+  intrinsicValue Float?
+  currentPrice  Float?
+  marginOfSafety Float?
+  riskScore     Float?
+  modelUsed     String?
+
+  company Company @relation(fields: [companyId], references: [id], onDelete: Cascade)
+
+  @@index([companyId])
+  @@map("analyses")
+}
+
+model Portfolio {
+  id        String   @id @default(cuid())
+  name      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  holdings Holding[]
+
+  @@map("portfolios")
+}
+
+model Holding {
+  id            String   @id @default(cuid())
+  portfolioId    String
+  companyId     String
+  buyPrice      Float
+  buyQuantity   Float
+  currentPrice Float?
+  updatedAt    DateTime @updatedAt
+
+  portfolio Portfolio @relation(fields: [portfolioId], references: [id], onDelete: Cascade)
+  company  Company   @relation(fields: [companyId], references: [id], onDelete: Cascade)
+
+  @@index([portfolioId])
+  @@map("holdings")
+}
+
+model MacroSnapshot {
+  id              String   @id @default(cuid())
+  cn10y           Float?
+  usdcny         Float?
+  lpr             Float?
+  m2              Float?
+  socialFinancing  Float?
+  cpi             Float?
+  pmi             Float?
+  createdAt       DateTime @default(now())
+
+  @@map("macro_snapshots")
+}
