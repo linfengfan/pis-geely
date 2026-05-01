@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "ashare-data-provider": {
+      "command": "python3",
+      "args": ["/Users/hyxl/hyxl/pis-geely/股票/A-Share-Analyst/node_modules/@wbavon/china-market-data/mcp_server.py"]
+    }
+  }
+}
