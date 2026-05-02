@@ -11,6 +11,7 @@
     "db:push": "prisma db push"
   },
   "dependencies": {
+    "@anthropic-ai/sdk": "^0.92.0",
     "@base-ui/react": "^1.4.1",
     "@prisma/client": "^6.0.0",
     "antd": "^5.24.0",

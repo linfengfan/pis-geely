@@ -98,11 +98,6 @@ export default function Home() {
           })}
         </div>
       </div>
-
-      {/* 底部说明 */}
-      <div className="mt-12 text-center text-sm text-text-muted">
-        <p>严格遵循「骨-筋-肉-血」四维框架 · 绝对不做左侧交易 · 鳄鱼法则风控</p>
-      </div>
     </div>
   )
 }
