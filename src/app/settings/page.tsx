@@ -1,7 +1,7 @@
 'use client'
 
-import { useState } from 'react'
-import { CheckCircle2, Info, Package } from 'lucide-react'
+import { useState, useEffect } from 'react'
+import { CheckCircle2, Info, Package, Key } from 'lucide-react'
 import { Button } from '@/components/ui'
 import { Input } from '@/components/ui'
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui'
@@ -9,6 +9,9 @@ import { Separator } from '@/components/ui'
 import { Badge } from '@/components/ui'
 
 export default function SettingsPage() {
+  const [apiKey, setApiKey] = useState('')
+  const [apiKeySaved, setApiKeySaved] = useState(false)
+
   const [macroData, setMacroData] = useState({
     cn10y: '2.50',
     usdcny: '7.2500',
@@ -19,6 +22,19 @@ export default function SettingsPage() {
   })
 
   const [saved, setSaved] = useState(false)
+
+  // API Key 保存
+  const saveApiKey = () => {
+    localStorage.setItem('ANTHROPIC_API_KEY', apiKey)
+    setApiKeySaved(true)
+    setTimeout(() => setApiKeySaved(false), 3000)
+  }
+
+  // 页面加载时读取 API Key
+  useEffect(() => {
+    const saved = localStorage.getItem('ANTHROPIC_API_KEY')
+    if (saved) setApiKey(saved)
+  }, [])
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
@@ -33,6 +49,50 @@ export default function SettingsPage() {
         <h1 className="text-2xl font-bold text-foreground">设置</h1>
         <p className="text-sm text-muted-foreground mt-1">配置宏观参数，这些值将用于估值计算</p>
       </div>
+
+      {/* API 配置区块 */}
+      <Card className="mb-6 border-l-4 border-l-amber-500">
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <Key className="size-4" />
+            API 配置
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="space-y-4">
+            <div className="space-y-2">
+              <label className="text-sm text-muted-foreground">Anthropic API Key</label>
+              <div className="flex gap-3">
+                <Input
+                  type="password"
+                  value={apiKey}
+                  onChange={(e) => setApiKey(e.target.value)}
+                  placeholder="sk-ant-xxxxx"
+                  className="font-mono"
+                />
+                <Button onClick={saveApiKey}>保存</Button>
+              </div>
+              <p className="text-xs text-muted-foreground">
+                用于 LLM 估值计算。获取 Key: https://console.anthropic.com/settings/keys
+              </p>
+            </div>
+            <div className="flex items-center gap-2">
+              <span className="text-sm text-muted-foreground">状态:</span>
+              {apiKey ? (
+                <Badge variant="default" className="bg-emerald-500">已配置</Badge>
+              ) : (
+                <Badge variant="destructive">未配置</Badge>
+              )}
+            </div>
+            {apiKeySaved && (
+              <div className="flex items-center gap-2 text-emerald-500 text-sm">
+                <CheckCircle2 className="size-4" />
+                <span>API Key 已保存</span>
+              </div>
+            )}
+          </div>
+        </CardContent>
+      </Card>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* 宏观数据录入 */}
