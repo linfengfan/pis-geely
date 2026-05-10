@@ -4,6 +4,8 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
+    "ai:teams": "bash ./.catpaw/scripts/start-agents.sh",
+    "ai:clean": "tmux kill-session -t 研发评审会",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
@@ -24,7 +26,8 @@
     "recharts": "^2.15.0",
     "shadcn": "^4.6.0",
     "tailwind-merge": "^3.5.0",
-    "tw-animate-css": "^1.4.0"
+    "tw-animate-css": "^1.4.0",
+    "zod": "^4.4.3"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3.3.5",
